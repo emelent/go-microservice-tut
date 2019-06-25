@@ -4,11 +4,10 @@ RUN mkdir /app
 ADD . /app/ 
 WORKDIR /app 
 RUN go get -d -v ./...
-RUN make docker-build
+RUN make build
 
 
 FROM iron/base
-# ADD accountservice-linux-amd64 /
-COPY --from=build /app/accountservice-linux-amd64 accountservice-linux-amd64 
+COPY --from=build /app/accountservice accountservice
+ENTRYPOINT ["./accountservice"]
 EXPOSE 6767
-ENTRYPOINT ["./accountservice-linux-amd64"]
