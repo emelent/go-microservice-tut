@@ -11,6 +11,7 @@ import (
 )
 
 var DBClient dbclient.IBoltClient
+var isHealthy = true
 
 func GetAccount(w http.ResponseWriter, r *http.Request) {
 	accountID := mux.Vars(r)["accountId"]
@@ -36,7 +37,7 @@ func GetAccount(w http.ResponseWriter, r *http.Request) {
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	dbUp := DBClient.Check()
 	var data []byte
-	if dbUp {
+	if dbUp && isHealthy {
 		data, _ = json.Marshal(healthCheckResponse{
 			Status: "UP",
 		})
@@ -48,6 +49,17 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJsonResponse(w, http.StatusOK, data)
+}
+
+func SetHealthyState(w http.ResponseWriter, r *http.Request) {
+	state, err := strconv.ParseBool(mux.Vars(r)["state"])
+	if err != nil {
+		log.Println("Invalid request to SetHealthyState, expected true or false")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	isHealthy = state
+	w.WriteHeader(http.StatusOK)
 }
 
 func writeJsonResponse(w http.ResponseWriter, status int, data []byte) {

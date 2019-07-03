@@ -14,14 +14,20 @@ type Routes []Route
 var routes = Routes{
 	Route{
 		"GetAccount",
-		"GET",
+		http.MethodGet,
 		"/accounts/{accountId}",
 		GetAccount,
 	},
 	Route{
 		"HealthCheck",
-		"GET",
+		http.MethodGet,
 		"/health",
 		HealthCheck,
+	},
+	Route{
+		"Testability",
+		http.MethodPut,
+		"/testability/healthy/{state}",
+		SetHealthyState,
 	},
 }
