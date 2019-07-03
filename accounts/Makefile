@@ -15,7 +15,7 @@ docker-deploy:
 	docker service create --name=accountservice --replicas=1\
 		--network=my_network -p=6767:6767 emelent/accountservice
 
-docker-clean-deploy:
+docker-deploy-fresh:
 	docker service create --name=accountservice --replicas=1\
 		--network=my_network -p=6767:6767 emelent/accountservice
 
