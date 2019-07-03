@@ -16,10 +16,15 @@ type IBoltClient interface {
 	OpenDb()
 	QueryAccount(accountId string) (model.Account, error)
 	Seed()
+	Check() bool
 }
 
 type BoltClient struct {
 	boltDB *bolt.DB
+}
+
+func (bc *BoltClient) Check() bool {
+	return bc.boltDB != nil
 }
 
 func (bc *BoltClient) OpenDb() {

@@ -4,10 +4,12 @@ RUN mkdir /app
 ADD . /app/ 
 WORKDIR /app 
 RUN go get -d -v ./...
-RUN make build
+RUN make all
 
 
 FROM iron/base
-COPY --from=build /app/accountservice accountservice
-ENTRYPOINT ["./accountservice"]
+COPY --from=build /app/build/* /app/
+RUN ls -lah /app/
+ENTRYPOINT ["./app/accountservice"]
 EXPOSE 6767
+HEALTHCHECK --interval=5s --timeout=5s CMD ["./app/healthcheck", "-port=6767"] || exit 1
