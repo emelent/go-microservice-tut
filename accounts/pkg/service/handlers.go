@@ -36,19 +36,19 @@ func GetAccount(w http.ResponseWriter, r *http.Request) {
 
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	dbUp := DBClient.Check()
-	var data []byte
 	if dbUp && isHealthy {
-		data, _ = json.Marshal(healthCheckResponse{
+		data, _ := json.Marshal(healthCheckResponse{
 			Status: "UP",
 		})
+		writeJsonResponse(w, http.StatusOK, data)
 
 	} else {
-		data, _ = json.Marshal(healthCheckResponse{
+		data, _ := json.Marshal(healthCheckResponse{
 			Status: "Database unaccessible",
 		})
+		writeJsonResponse(w, http.StatusServiceUnavailable, data)
 	}
 
-	writeJsonResponse(w, http.StatusOK, data)
 }
 
 func SetHealthyState(w http.ResponseWriter, r *http.Request) {
