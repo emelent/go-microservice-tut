@@ -3,7 +3,7 @@ FROM golang:1.12.6-stretch as build
 RUN mkdir /app 
 ADD . /app/ 
 WORKDIR /app 
-RUN go get -d -v ./...
+RUN go mod init github.com/emelent/go-microservices-tut
 RUN make all
 
 
