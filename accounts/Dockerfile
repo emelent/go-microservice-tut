@@ -1,14 +1,13 @@
 # prepare build
 FROM golang:1.12.6-stretch as build
 RUN mkdir /app 
-ADD . /app/ 
-WORKDIR /app 
-RUN go get -v ./...
+COPY ./ /app
+WORKDIR /app/accounts
 RUN make all
 
 
 FROM iron/base
-COPY --from=build /app/build/* /app/
+COPY --from=build /app/accounts/build/* /app/
 RUN ls -lah /app/
 ENTRYPOINT ["./app/accountservice"]
 EXPOSE 6767

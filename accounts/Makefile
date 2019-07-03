@@ -3,7 +3,7 @@ SERVER_BIN=${BIN_DIR}/accountservice
 HEALTH_BIN=${BIN_DIR}/healthcheck
 export CGO_ENABLED=0
 
-all: cmd/server/main.go cmd/healthchecker/main.go
+all:
 	go build -o ${SERVER_BIN} cmd/server/main.go
 	go build -o ${HEALTH_BIN} cmd/healthchecker/main.go
 
