@@ -77,7 +77,7 @@ func (bc *BoltClient) seedAccounts() {
 		key := strconv.Itoa(10000 + i)
 
 		acc := model.Account{
-			Id:   key,
+			ID:   key,
 			Name: "Person_" + strconv.Itoa(i),
 		}
 

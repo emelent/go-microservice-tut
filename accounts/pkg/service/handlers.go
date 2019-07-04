@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"log"
+	"net"
 	"net/http"
 	"strconv"
 
@@ -25,13 +26,26 @@ func GetAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	account.ServedBy = getIP()
 	data, _ := json.Marshal(account)
 	writeJsonResponse(w, http.StatusOK, data)
-	//w.Header().Set("Content-Type", "application/json")
-	//w.Header().Set("Content-Length", strconv.Itoa(len(data)))
-	//w.WriteHeader(http.StatusOK)
-	//w.Write(data)
+}
 
+func getIP() string {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return "error"
+	}
+
+	for _, address := range addrs {
+		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				return ipnet.IP.String()
+			}
+		}
+	}
+
+	panic("Unable to determine local IP address (non loopback). Exiting")
 }
 
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
@@ -70,5 +84,5 @@ func writeJsonResponse(w http.ResponseWriter, status int, data []byte) {
 }
 
 type healthCheckResponse struct {
-	Status string `json: "status"`
+	Status string `json:"status"`
 }

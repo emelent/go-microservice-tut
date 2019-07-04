@@ -10,12 +10,12 @@ all:
 docker-images:
 	docker build -t emelent/accountservice .
 	
-docker-deploy:
+re-deploy:
 	docker service rm accountservice
 	docker service create --name=accountservice --replicas=1\
 		--network=my_network -p=6767:6767 emelent/accountservice
 
-docker-deploy-fresh:
+deploy:
 	docker service create --name=accountservice --replicas=1\
 		--network=my_network -p=6767:6767 emelent/accountservice
 
